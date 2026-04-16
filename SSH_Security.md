@@ -1,26 +1,31 @@
 # SSH Security
 
 Secure Shell (SSH) is a protocol for securely accessing servers over a network. Ensuring good SSH security practices is critical to protect your system from unauthorized access. Here are key steps to enhance SSH security on your Raspberry Pi:
-
-## 1. Generating Public Keys
+## 1. install ssh
+1. to install ssh on raspberry pi and start it, run the following commands:
+   ```bash
+   sudo apt install opensshd-server -y
+   sudo systemctl start ssh
+   sudo systemctl enable ssh 
+   ```
+## 2. Generating Public Keys
 Using public key authentication is more secure than using passwords. To generate a public-private key pair:
 
 1. Open a terminal on your local machine.
 2. Run the following command:
    ```bash
-   ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+   ssh-keygen 
    ```
-   Replace `your_email@example.com` with your email address.
 3. Press Enter to accept the default file location or specify a different one.
 4. Set a passphrase for an added layer of security (optional).
 
 To copy your public key to the Raspberry Pi:
 ```bash
-ssh-copy-id pi@your_raspberry_pi_ip
+ssh-copy-id username@your_raspberry_pi_ip
 ```
 Replace `your_raspberry_pi_ip` with the Raspberry Pi's IP address.
 
-## 2. Changing SSH Port
+## 3. Changing SSH Port
 Changing the default SSH port (22) can help reduce the risk of automated attacks.
 
 1. Open the SSH configuration file:
@@ -32,7 +37,7 @@ Changing the default SSH port (22) can help reduce the risk of automated attacks
    Port 2222
    ```
    Replace `2222` with your preferred port number.
-3. Save the file and restart the SSH service:
+4. Save the file and restart the SSH service:
    ```bash
    sudo systemctl restart ssh
    ```
