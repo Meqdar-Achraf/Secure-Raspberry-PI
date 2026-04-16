@@ -1,46 +1,122 @@
-# Configuration d'une adresse IP statique et des paramètres DNS sur Raspberry Pi
+# Configuration d'une adresse IP statique et des paramètres DNS
 
-## Introduction
-Configurer une adresse IP statique et les paramètres DNS sur un Raspberry Pi peut améliorer la stabilité de votre réseau. Cela permet à des dispositifs réseau, comme les ordinateurs ou les serveurs, de se connecter à votre Raspberry Pi à chaque fois à la même adresse IP.
 
-## Étape 1 : Éditer le fichier /etc/dhcpcd.conf
+## Étape 1 : Identifier votre interface réseau
 
-1. **Ouvrez le terminal sur votre Raspberry Pi.**  
+Avant de configurer une IP statique, identifiez votre interface réseau :
 
-2. **Utilisez l'éditeur de texte de votre choix** (par exemple, nano) pour ouvrir le fichier `dhcpcd.conf` :  
-   ```bash
-   sudo nano /etc/dhcpcd.conf
-   ```  
+```bash
+ifconfig
+```
 
-3. **Ajoutez les lignes suivantes à la fin du fichier**. Remplacez `xxx` par vos valeurs spécifiques :  
-   ```bash
-   interface eth0  # ou wlan0 pour le Wi-Fi
-   static ip_address=192.168.1.xxx/24  # Remplacez avec votre adresse IP
-   static routers=192.168.1.1  # Remplacez avec l'adresse IP de votre routeur
-   static domain_name_servers=192.168.1.1  # Votre serveur DNS
-   ```  
+Les interfaces courantes sont :
+- `eth0` : Connexion Ethernet filaire
+- `wlan0` : Connexion Wi-Fi
 
-4. **Enregistrez le fichier** et fermez l'éditeur (dans nano : Ctrl + X, puis Y et Entrée).
+## Étape 2 : Obtenir les informations réseau actuelles
 
-5. **Redémarrez votre Raspberry Pi** pour appliquer les modifications :  
-   ```bash
-   sudo reboot
-   ```
+Consultez votre configuration DHCP actuelle :
 
-## Étape 2 : Éditer le fichier /etc/resolv.conf
+```bash
+ip addr show
+ip route show
+cat /etc/resolv.conf
+```
 
-1. **Ouvrez le fichier `resolv.conf`** :  
-   ```bash
-   sudo nano /etc/resolv.conf
-   ```  
+Notez les informations suivantes :
+- Adresse IP actuelle
+- Passerelle (Gateway)
+- Serveurs DNS
 
-2. **Ajoutez les serveurs DNS** de votre choix. Par exemple :  
-   ```bash
-   nameserver 8.8.8.8  # Google DNS
-   nameserver 8.8.4.4  # Google DNS
-   ```  
+## Étape 3 : Configurer une adresse IP statique via dhcpcd.conf
 
-3. **Enregistrez le fichier** et fermez l'éditeur.
+### Éditer le fichier dhcpcd.conf
 
-## Conclusion
-Votre Raspberry Pi est maintenant configuré avec une adresse IP statique et les paramètres DNS. Cela assurera une connexion réseau stable et fiable.
+```bash
+sudo nano /etc/dhcpcd.conf
+```
+
+### Ajouter la configuration statique
+
+À la fin du fichier, ajoutez les lignes suivantes pour configurer une IP statique sur Ethernet :
+
+```bash
+# Configuration IP statique pour Ethernet
+interface eth0
+static ip_address=192.168.1.100/24
+static routers=192.168.1.1
+static domain_name_servers=8.8.8.8 8.8.4.4
+```
+
+Ou pour Wi-Fi :
+
+```bash
+# Configuration IP statique pour Wi-Fi
+interface wlan0
+static ip_address=192.168.1.100/24
+static routers=192.168.1.1
+static domain_name_servers=8.8.8.8 8.8.4.4
+```
+
+### Explication des paramètres
+
+- `interface` : L'interface réseau à configurer (eth0, wlan0, etc.)
+- `static ip_address` : L'adresse IP statique avec le masque CIDR (ex: /24 pour 255.255.255.0)
+- `static routers` : L'adresse de la passerelle par défaut
+- `static domain_name_servers` : Les serveurs DNS (séparés par un espace)
+
+### Sauvegarder et quitter
+
+## Étape 4 : Redémarrer le service dhcpcd
+
+Pour appliquer les modifications, redémarrez le service dhcpcd :
+
+```bash
+sudo systemctl restart dhcpcd
+```
+
+Ou redémarrez complètement votre Raspberry Pi :
+
+```bash
+sudo reboot
+```
+
+## Étape 5 : Vérifier la configuration
+
+Vérifiez que l'adresse IP statique est bien configurée :
+
+```bash
+ip addr show
+```
+
+## Configuration DNS alternative via resolv.conf
+
+### Éditer resolv.conf
+
+```bash
+sudo nano /etc/resolv.conf
+```
+
+### Ajouter les serveurs DNS
+
+```bash
+# Exemple avec Google DNS
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+```
+
+## Vérifier la résolution DNS
+
+Testez votre configuration DNS :
+
+```bash
+nslookup google.com
+```
+
+ou
+
+```bash
+dig google.com
+```
+
+Configurer une adresse IP statique et des paramètres DNS personnalisés est essentiel pour un Raspberry Pi utilisé en production. En suivant ce guide, vous assurerez une stabilité réseau et une meilleure sécurité pour votre système de surveillance.
