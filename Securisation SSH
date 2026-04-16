@@ -1,7 +1,0 @@
-# Sécuriser l'accès distant SSH (génération de clés, changement de port, désactivation du compte root).
-
-Étape 1 – Création de la paire de clés
-La première étape consiste à créer une paire de clés sur la machine cliente (généralement votre ordinateur) :
-```markdown
-ssh-keygen
-```
