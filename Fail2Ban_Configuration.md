@@ -34,6 +34,11 @@ Fail2Ban est un logiciel qui protège votre serveur contre les attaques par forc
    À l'intérieur, vous pouvez configurer les paramètres pour les services que vous souhaitez protéger. Par exemple, pour protéger SSH : 
    
    ```ini
+   [DEFAULT]
+   bantime = 10m
+   findtime = 10m
+   maxretry = 5
+   
    [sshd]
    enabled = true
    port = ssh
@@ -58,3 +63,30 @@ sudo fail2ban-client status
 ```
 
 Cela vous montrera l'état de Fail2Ban et les services qu'il surveille.
+## 4. Gestion des adresses IP bannies
+
+### Débannir une adresse IP
+
+```bash
+sudo fail2ban-client set sshd unbanip <adresse_ip>
+```
+
+### Bannir manuellement une adresse IP
+
+```bash
+sudo fail2ban-client set sshd banip <adresse_ip>
+```
+
+## 5. Surveillance des logs
+
+Pour surveiller les activités de Fail2Ban en temps réel :
+
+```bash
+sudo tail -f /var/log/fail2ban.log
+```
+
+Pour voir les tentatives de connexion échouées :
+
+```bash
+sudo tail -f /var/log/auth.log
+```
