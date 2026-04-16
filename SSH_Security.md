@@ -1,63 +1,65 @@
-# SSH Security
+# Sécurité SSH
 
-Secure Shell (SSH) is a protocol for securely accessing servers over a network. Ensuring good SSH security practices is critical to protect your system from unauthorized access. Here are key steps to enhance SSH security on your Raspberry Pi:
-## 1. install ssh
-1. to install ssh on raspberry pi and start it, run the following commands:
+Secure Shell (SSH) est un protocole pour accéder de manière sécurisée aux serveurs sur un réseau. Assurer de bonnes pratiques de sécurité SSH est essentiel pour protéger votre système contre les accès non autorisés. Voici les étapes clés pour [...]
+
+## 1. Installer SSH
+1. Pour installer SSH sur le Raspberry Pi et le démarrer, exécutez les commandes suivantes :
    ```bash
    sudo apt install opensshd-server -y
    sudo systemctl start ssh
    sudo systemctl enable ssh 
    ```
-## 2. Generating Public Keys
-Using public key authentication is more secure than using passwords. To generate a public-private key pair:
 
-1. Open a terminal on your local machine.
-2. Run the following command:
+## 2. Générer des clés publiques
+L'authentification par clé publique est plus sécurisée que l'utilisation de mots de passe. Pour générer une paire de clés publique-privée :
+
+1. Ouvrez un terminal sur votre machine locale.
+2. Exécutez la commande suivante :
    ```bash
    ssh-keygen 
    ```
-3. Press Enter to accept the default file location or specify a different one.
-4. Set a passphrase for an added layer of security (optional).
+3. Appuyez sur Entrée pour accepter l'emplacement du fichier par défaut ou spécifiez un emplacement différent.
+4. Définissez une phrase de passe pour une couche de sécurité supplémentaire (facultatif).
 
-To copy your public key to the Raspberry Pi:
+Pour copier votre clé publique vers le Raspberry Pi :
 ```bash
-ssh-copy-id username@your_raspberry_pi_ip
+ssh-copy-id nom_utilisateur@adresse_ip_raspberry_pi
 ```
-Replace `your_raspberry_pi_ip` with the Raspberry Pi's IP address.
+Remplacez `adresse_ip_raspberry_pi` par l'adresse IP de votre Raspberry Pi.
 
-## 3. Changing SSH Port
-Changing the default SSH port (22) can help reduce the risk of automated attacks.
+## 3. Changer le port SSH
+Changer le port SSH par défaut (22) peut aider à réduire le risque d'attaques automatisées.
 
-1. Open the SSH configuration file:
+1. Ouvrez le fichier de configuration SSH :
    ```bash
    sudo nano /etc/ssh/sshd_config
    ```
-2. Find the line that says `#Port 22` and change it to:
+2. Trouvez la ligne qui dit `#Port 22` et changez-la en :
    ```bash
    Port 2222
    ```
-   Replace `2222` with your preferred port number.
-4. Save the file and restart the SSH service:
+   Remplacez `2222` par le numéro de port que vous préférez.
+3. Enregistrez le fichier et redémarrez le service SSH :
    ```bash
    sudo systemctl restart ssh
    ```
-Make sure to adjust your firewall settings to allow connections to the new port.
+Assurez-vous d'ajuster les paramètres de votre pare-feu pour autoriser les connexions au nouveau port.
 
-## 3. Disabling Root Account
-Disabling root login via SSH adds an extra layer of security:
+## 4. Désactiver le compte root
+Désactiver la connexion root via SSH ajoute une couche de sécurité supplémentaire :
 
-1. Open the SSH configuration file:
+1. Ouvrez le fichier de configuration SSH :
    ```bash
    sudo nano /etc/ssh/sshd_config
    ```
-2. Find the line that says `PermitRootLogin yes` and change it to:
+2. Trouvez la ligne qui dit `PermitRootLogin yes` et changez-la en :
    ```bash
    PermitRootLogin no
    ```
-3. Save the file and restart the SSH service:
+3. Enregistrez le fichier et redémarrez le service SSH :
    ```bash
    sudo systemctl restart ssh
    ```
 
 ## Conclusion
-By following these steps, you can significantly enhance the security of your SSH connections and protect your Raspberry Pi from unauthorized access. Always keep your system and software updated to safeguard against vulnerabilities.
+En suivant ces étapes, vous pouvez considérablement améliorer la sécurité de vos connexions SSH et protéger votre Raspberry Pi contre les accès non autorisés. Gardez toujours votre système et vos logiciels à jour pour [...]
