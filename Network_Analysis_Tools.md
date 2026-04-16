@@ -10,7 +10,10 @@ Nmap (Network Mapper) is an open-source tool designed for network exploration an
   - Port scanning
   - Service version detection
   - OS detection
-
+### Install Nmap
+```bash
+sudo apt install nmap -y
+```
 ### Basic Usage
 To scan a host for open ports, you can use the following command:
 ```bash
@@ -28,14 +31,14 @@ Netstat is a command-line utility that displays networking statistics and connec
   - Displays active connections
   - Shows listening ports
   - Provides routing tables
+  - 
+### Install Netstat
+```bash
+sudo apt install net-tools -y
+```
 
 ### Basic Usage
 To view current TCP connections:
-```bash
-netstat -tn
-```
-
-### Example
 ```bash
 netstat -tn
 ```
@@ -46,6 +49,11 @@ Wireshark is a widely-used network protocol analyzer that allows users to captur
   - Packet capturing
   - Live traffic analysis
   - Detailed packet inspection
+
+### Install wireshark
+```bash
+sudo apt install wireshark -y
+```
 
 ### Basic Usage
 To start capturing packets:
@@ -65,6 +73,11 @@ Tcpdump is a powerful command-line packet analyzer. It allows users to display a
   - Captures packets on a network interface
   - Can output to files for later analysis
 
+### Install Tcpdump
+```bash
+sudo apt install tcpdump -y
+```
+
 ### Basic Usage
 To capture packets:
 ```bash
@@ -75,6 +88,3 @@ tcpdump -i <interface>
 ```bash
 tcpdump -i eth0
 ```
-
-## Conclusion
-Understanding these tools will enhance your ability to analyze network traffic, diagnose issues, and improve overall network performance. Each tool has its strengths and use cases, and they can often be used in conjunction to provide comprehensive insights into network behavior.
