@@ -43,8 +43,8 @@ sudo nano /etc/dhcpcd.conf
 ```bash
 # Configuration IP statique pour Ethernet
 interface eth0
-static ip_address=192.168.1.100/24
-static routers=192.168.1.1
+static ip_address=192.168.31.95/24
+static routers=192.168.31.1
 static domain_name_servers=8.8.8.8 8.8.4.4
 ```
 
@@ -53,8 +53,8 @@ Ou pour Wi-Fi :
 ```bash
 # Configuration IP statique pour Wi-Fi
 interface wlan0
-static ip_address=192.168.1.100/24
-static routers=192.168.1.1
+static ip_address=192.168.31.95/24
+static routers=192.168.31.1
 static domain_name_servers=8.8.8.8 8.8.4.4
 ```
 
