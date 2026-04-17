@@ -13,6 +13,3 @@ Ce projet vise à renforcer la sécurité des appareils Raspberry Pi en mettant 
 ## Objectifs du projet  
 - Faire évoluer les mesures actuelles de sécurité réseau pour les déploiements Raspberry Pi.  
 - Renforcer la sécurité des systèmes de surveillance basés sur Raspberry Pi, en garantissant l’intégrité et la confidentialité des données.  
-
-## Conclusion  
-En suivant les directives fournies dans ce dépôt, les utilisateurs peuvent sécuriser leurs appareils Raspberry Pi contre les menaces courantes et garantir un fonctionnement fiable dans diverses applications.
