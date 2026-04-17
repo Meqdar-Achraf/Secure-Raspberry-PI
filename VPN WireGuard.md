@@ -1,13 +1,5 @@
 # Déployer un serveur VPN WireGuard
 
-## Introduction
-WireGuard est un protocole VPN moderne, simple et performant. Il est conçu pour être rapide à configurer et à utiliser. Ce guide vous expliquera comment déployer un serveur WireGuard sur votre Raspberry Pi pour un accès externe sécurisé.
-
-## Prérequis
-- Un Raspberry Pi avec Raspbian installé.
-- Accès root à votre Raspberry Pi.
-- Une connexion Internet.
-
 ## Étape 1: Mise à jour de votre système
 Avant de commencer, mettez à jour votre système avec les commandes suivantes:
 ```bash
