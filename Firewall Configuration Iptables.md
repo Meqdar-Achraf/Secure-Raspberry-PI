@@ -17,24 +17,34 @@ sudo apt install iptables-persistent -y
 ```
 
 ## Étape 2 : Configuration de règles de filtrage
-### Bloquer tout le trafic
-Par défaut, nous allons d'abord bloquer tout le trafic. Exécutez les commandes suivantes :
-```bash
-sudo iptables -P INPUT DROP
-sudo iptables -P FORWARD DROP
-sudo iptables -P OUTPUT DROP
-```
+
 ### Autoriser le trafic essentiel
 Autorisez le trafic essentiel comme SSH et HTTP :
 ```bash
-sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT  # SSH
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT  # SSH 
 sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT  # HTTP
 sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT # HTTPS
+
+#Loopback
+sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A OUTPUT -o lo -j ACCEPT
+
+# connexions déjà établies
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 ```
 Autotiser DNS
 ```bash
 sudo iptables -A INPUT -p udp --dport 53 -j ACCEPT
 sudo iptables -A INPUT -p tcp --dport 53 -j ACCEPT
+```
+
+### Bloquer tout le trafic
+Pour bloquer tout le trafic. Exécutez les commandes suivantes :
+```bash
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUTPUT DROP
 ```
 ## Règles avancées
 
