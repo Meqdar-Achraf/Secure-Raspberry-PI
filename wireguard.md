@@ -81,7 +81,7 @@ AllowedIPs = 10.6.0.3/32
 
 ---
 
-### Configuration du Pare-feu et Routage
+### Configuration du Pare-feu
 
 Activez le pare-feu s'il ne l'est pas :
 
