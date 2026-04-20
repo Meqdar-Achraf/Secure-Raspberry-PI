@@ -5,7 +5,7 @@ Secure Shell (SSH) est un protocole pour accéder de manière sécurisée aux se
 ## 1. Installer SSH
 1. Pour installer SSH sur le Raspberry Pi et le démarrer, exécutez les commandes suivantes :
    ```bash
-   sudo apt install opensshd-server -y
+   sudo apt install openssh-server -y
    sudo systemctl start ssh
    sudo systemctl enable ssh 
    ```
@@ -39,7 +39,15 @@ Changer le port SSH par défaut (22) peut aider à réduire le risque d'attaques
    Port 2222
    ```
    Remplacez `2222` par le numéro de port que vous préférez.
-3. Enregistrez le fichier et redémarrez le service SSH :
+3. Autorisez le nouveau port sur le pare-feu
+      ```bash
+   sudo ufw allow 2222/tcp
+   ```
+   ou
+      ```bash
+   sudo iptables -A INPUT -p tcp --dport 2222 -j ACCEPT
+   ```
+4. Enregistrez le fichier et redémarrez le service SSH :
    ```bash
    sudo systemctl restart ssh
    ```
