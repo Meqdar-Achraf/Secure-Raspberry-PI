@@ -1,73 +1,65 @@
-# Configuration du Pare-feu avec iptables
+# Configuration du Pare-feu avec ufw
 
 
-## Étape 1 : Installation d'iptables
-Iptables est généralement préinstallé sur Raspberry. Pour vérifier son installation, exécutez :
+## Étape 1 : Installation du ufw
+ufw est généralement préinstallé sur Raspberry. Pour vérifier son installation, exécutez :
 ```bash
-sudo iptables -L
+sudo ufw status
 ```
-Si iptables n'est pas installé, vous pouvez l'installer avec la commande suivante :
+Si ufw n'est pas installé, vous pouvez l'installer avec la commande suivante :
 ```bash
-sudo apt-get install iptables
+sudo apt install ufw -y
 ```
 
-Pour rendre les règles persistantes après redémarrage :
-```bash
-sudo apt install iptables-persistent -y
-```
 
 ## Étape 2 : Configuration de règles de filtrage
 
 ### Autoriser le trafic essentiel
 Autorisez le trafic essentiel comme SSH et HTTP :
 ```bash
-sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT  # SSH 
-sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT  # HTTP
-sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT # HTTPS
+sudo ufw allow 22/tcp  # SSH 
+sudo ufw allow 80/tcp  # HTTP
+sudo ufw allow 443/tcp # HTTPS
 
-#Loopback
-sudo iptables -A INPUT -i lo -j ACCEPT
-sudo iptables -A OUTPUT -o lo -j ACCEPT
 
-# connexions déjà établies
-sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-sudo iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-```
 Autotiser DNS
 ```bash
-sudo iptables -A INPUT -p udp --dport 53 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 53 -j ACCEPT
+sudo ufw allow out 53/tcp
+sudo ufw allow out 53/udp
 ```
 
 ### Bloquer tout le trafic
-Pour bloquer tout le trafic. Exécutez les commandes suivantes :
+Pour bloquer tout le trafic. Exécutez les commandes suivantes 
 ```bash
-sudo iptables -P INPUT DROP
-sudo iptables -P FORWARD DROP
-sudo iptables -P OUTPUT DROP
+sudo ufw default deny incoming
+sudo ufw default deny outgoing
+sudo ufw default deny routed
 ```
 ## Règles avancées
 
 ### Bloquer une adresse IP
 ```bash
-sudo iptables -A INPUT -s 192.168.1.50 -j DROP
+sudo ufw deny from 192.168.1.50
 ```
 
 ### Bloquer un port spécifique
 
 ```bash
-sudo iptables -A INPUT -p tcp --dport 3306 -j DROP
+sudo ufw dent 3306/tcp
+```
+### Autoriser un port spécifique
+```bash
+sudo ufw allow 51820/udp
 ```
 
-
-## Étape 3 : Sauvegarde de la configuration
-Il est important de sauvegarder votre configuration :
+## Étape 3 : activer ufw
+pour activer le par-feu ufw.  Exécutez la commande suivante
 ```bash
-sudo iptables-save > /etc/iptables/rules.v4
+sudo ufw enable
 ```
 
-## Étape 4 : Restauration de la configuration
-Pour restaurer la configuration, utilisez la commande suivante :
+## Étape 4 : Vérifier que tout fonctionne
+Pour vérifier que tout fonctionne bien, utilisez la commande suivante :
 ```bash
-sudo iptables-restore < /etc/iptables/rules.v4
+sudo ufw status verbose
 ```
