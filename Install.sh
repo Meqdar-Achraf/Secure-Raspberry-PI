@@ -16,6 +16,7 @@ cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
 echo "=== ssh config ==="
 sudo sed -i "s/#Port 22/Port 2222/" /etc/ssh/sshd_config
 sudo sed -i "s/#PermitRootLogin yes/PermitRootLogin no/" /etc/ssh/sshd_config
+# sudo sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin no/" /etc/ssh/sshd_config
 sudo sed -i "s/#PasswordAuthentication yes/PasswordAuthentication no/" /etc/ssh/sshd_config
 
 echo "=== firewall ==="
