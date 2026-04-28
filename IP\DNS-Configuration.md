@@ -1,5 +1,190 @@
 # Configuration d'une adresse IP statique et des paramètres DNS
 
+## Détection de la version Raspberry Pi OS
+
+Avant de configurer votre réseau, identifiez votre version de Raspberry Pi OS :
+
+```bash
+cat /etc/os-release
+# ou
+lsb_release -a
+```
+
+- **Raspberry Pi OS Bullseye et antérieur** : Utilisez la méthode `dhcpcd`
+- **Raspberry Pi OS Bookworm et ultérieur** : Utilisez la méthode `NetworkManager` (recommandé)
+
+## Étape 1 : Identifier votre interface réseau
+
+Avant de configurer une IP statique, identifiez votre interface réseau :
+
+```bash
+ifconfig
+```
+
+Les interfaces courantes sont :
+- `eth0` ou `enp*` : Connexion Ethernet filaire
+- `wlan0` ou `wlp*` : Connexion Wi-Fi
+
+## Étape 2 : Obtenir les informations réseau actuelles
+
+Consultez votre configuration DHCP actuelle :
+
+```bash
+ip addr show
+ip route show
+cat /etc/resolv.conf
+nmcli device show  # Sur Bookworm avec NetworkManager
+```
+
+Notez les informations suivantes :
+- Adresse IP actuelle
+- Passerelle (Gateway)
+- Serveurs DNS
+
+---
+
+# Méthode 1 : NetworkManager (Raspberry Pi OS Bookworm - Recommandé)
+
+## Étape 1 : Vérifier l'installation de NetworkManager
+
+```bash
+sudo systemctl status NetworkManager
+```
+
+Si NetworkManager n'est pas installé :
+
+```bash
+sudo apt-get update
+sudo apt-get install -y network-manager
+sudo systemctl enable NetworkManager
+sudo systemctl start NetworkManager
+```
+
+## Étape 2 : Vérifier les connexions existantes
+
+```bash
+nmcli connection show
+nmcli device show
+```
+
+## Étape 3 : Configurer une IP statique pour Ethernet
+
+### Via ligne de commande
+
+```bash
+# Lister les connexions disponibles
+nmcli connection show
+
+# Créer ou modifier une connexion Ethernet
+sudo nmcli connection modify "Wired connection 1" \
+  ipv4.addresses "192.168.31.95/24" \
+  ipv4.gateway "192.168.31.1" \
+  ipv4.dns "8.8.8.8 8.8.4.4" \
+  ipv4.method manual
+
+# Activer la connexion
+sudo nmcli connection up "Wired connection 1"
+```
+
+### Via fichier de configuration
+
+Créez un fichier de configuration pour Ethernet :
+
+```bash
+sudo nano /etc/NetworkManager/conf.d/99-static-ethernet.conf
+```
+
+Ajoutez la configuration suivante :
+
+```ini
+# Configuration IP statique pour Ethernet
+[device]
+match-device=interface_name:eth0
+```
+
+Ensuite, créez la connexion :
+
+```bash
+sudo nano /etc/NetworkManager/system-connections/Wired-connection-static.nmconnection
+```
+
+Ajoutez :
+
+```ini
+[connection]
+id=Wired-Static
+uuid=12345678-1234-1234-1234-123456789012
+type=802-3-ethernet
+interface-name=eth0
+autoconnect=true
+
+[ipv4]
+method=manual
+addresses=192.168.31.95/24
+gateway=192.168.31.1
+dns=8.8.8.8;8.8.4.4;
+dns-search=
+
+[ipv6]
+method=auto
+
+[proxy]
+```
+
+Définir les permissions correctes :
+
+```bash
+sudo chmod 600 /etc/NetworkManager/system-connections/Wired-connection-static.nmconnection
+sudo systemctl restart NetworkManager
+```
+
+## Étape 4 : Configurer une IP statique pour Wi-Fi
+
+### Via ligne de commande
+
+```bash
+# Lister les réseaux Wi-Fi disponibles
+nmcli device wifi list
+
+# Créer une connexion Wi-Fi
+sudo nmcli connection add type wifi ifname wlan0 con-name "WiFi-Static" ssid "YOUR_SSID"
+
+# Configurer l'IP statique
+sudo nmcli connection modify "WiFi-Static" \
+  ipv4.addresses "192.168.31.95/24" \
+  ipv4.gateway "192.168.31.1" \
+  ipv4.dns "8.8.8.8 8.8.4.4" \
+  ipv4.method manual
+
+# Configurer la sécurité Wi-Fi
+sudo nmcli connection modify "WiFi-Static" \
+  wifi-sec.key-mgmt wpa-psk \
+  wifi-sec.psk "YOUR_PASSWORD"
+
+# Activer la connexion
+sudo nmcli connection up "WiFi-Static"
+```
+
+## Étape 5 : Vérifier la configuration (NetworkManager)
+
+```bash
+# Vérifier le statut de la connexion
+nmcli connection show
+nmcli device show eth0
+
+# Vérifier l'adresse IP
+ip addr show
+ip route show
+
+# Tester la connectivité
+ping 8.8.8.8
+nslookup google.com
+```
+
+# Méthode 2 : dhcpcd (Raspberry Pi OS Bullseye et antérieur - Alternative)
+
+## Note
+Cette méthode est principalement pour les anciennes versions. NetworkManager est recommandé pour Bookworm.
 
 ## Étape 1 : Identifier votre interface réseau
 
