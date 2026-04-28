@@ -34,18 +34,105 @@ Fail2Ban est un logiciel qui protège votre serveur contre les attaques par forc
    À l'intérieur, vous pouvez configurer les paramètres pour les services que vous souhaitez protéger. Par exemple, pour protéger SSH : 
    
    ```ini
-   [DEFAULT]
-   bantime = 10m
-   findtime = 10m
-   maxretry = 5
-   
-   [sshd]
-   enabled = true
-   port = ssh
-   filter = sshd
-   logpath = /var/log/auth.log
-   maxretry = 5
-   bantime = 600
+```ini
+# Configuration de Fail2Ban - DURCISSÉE
+# Backend: systemd (recommandé pour les OS modernes)
+# SSH: Port 2222 personnalisé
+# Protection: SSH + Nginx (multiples jails)
+# Whitelist: Réseau administration
+
+[DEFAULT]
+# Backend systemd pour meilleure performance et fiabilité
+backend = systemd
+
+# Paramètres de bannissement globaux
+bantime = 600
+findtime = 600
+maxretry = 5  
+
+# WHITELIST - Réseau local d'administration (À ADAPTER!)
+# ⚠️ IMPORTANT: Remplacez 192.168.1.0/24 par votre plage réelle!
+ignoreip = 127.0.0.1/8 ::1 192.168.31.0/24
+
+# ============================================================
+# PROTECTION SSH - Port personnalisé 2222
+# ============================================================
+
+[sshd]
+enabled = true
+port = 2222
+filter = sshd
+backend = systemd
+logpath = %(syslog_backend)s
+maxretry = 5
+bantime = 600
+findtime = 600
+
+# ============================================================
+# PROTECTION NGINX - Multiples Jails
+# ============================================================
+
+# Protection contre les attaques par force brute sur l'authentification HTTP
+[nginx-http-auth]
+enabled = true
+port = http,https
+filter = nginx-http-auth
+logpath = /var/log/nginx/error.log
+maxretry = 5
+bantime = 600
+findtime = 600
+
+# Bloque les tentatives d'accès à des fichiers scripts inexistants
+[nginx-noscript]
+enabled = true
+port = http,https
+filter = nginx-noscript
+logpath = /var/log/nginx/access.log
+maxretry = 6
+bantime = 600
+findtime = 600
+
+# Bloque les mauvais bots
+[nginx-badbots]
+enabled = true
+port = http,https
+filter = nginx-badbots
+logpath = /var/log/nginx/access.log
+maxretry = 2
+bantime = 600
+findtime = 600
+
+# Bloque les tentatives de proxy non autorisées
+[nginx-noproxy]
+enabled = true
+port = http,https
+filter = nginx-noproxy
+logpath = /var/log/nginx/access.log
+maxretry = 2
+bantime = 600
+findtime = 600
+
+# Protège contre les dépassements de limite de débit
+[nginx-limit-req]
+enabled = true
+port = http,https
+filter = nginx-limit-req
+logpath = /var/log/nginx/error.log
+maxretry = 5
+bantime = 600
+findtime = 600
+
+# Détecte les scans de port
+[nginx-port-scan]
+enabled = true
+port = http,https
+filter = nginx-port-scan
+logpath = /var/log/nginx/access.log
+maxretry = 3
+bantime = 600
+findtime = 600
+```
+
    ```
 
 3. **Redémarrer le service Fail2Ban** : Appliquez les changements en redémarrant Fail2Ban.
