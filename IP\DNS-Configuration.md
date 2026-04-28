@@ -31,6 +31,7 @@ Consultez votre configuration DHCP actuelle :
 
 ```bash
 ip addr show
+ip route show
 cat /etc/resolv.conf
 nmcli device show  # Sur Bookworm avec NetworkManager
 ```
