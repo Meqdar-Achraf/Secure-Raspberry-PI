@@ -69,9 +69,9 @@ cd /etc/wireguard
 
 wg genkey | tee server_private.key | wg pubkey > server_public.key
 
-srv_priv=$(cat server_private.key)
+srv_priv=$(cat /etc/wireguard/server_private.key)
 
-cat <<'EOF' > wg0.conf
+cat <<EOF > wg0.conf
 [Interface]
 PrivateKey = $srv_priv
 Address = 10.0.0.1/24
@@ -88,3 +88,4 @@ sudo systemctl enable wg-quick@wg0
 sudo systemctl start wg-quick@wg0
 
 echo "=== DONE ==="
+
