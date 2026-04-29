@@ -175,9 +175,9 @@ cat /etc/os-release
 ### Étape 2 : Cloner le dépôt (optionnel avec git)
 
 ```bash
-# Clonez le dépôt REDJ
-git clone https://github.com/dfd482294-commits/redj.git
-cd redj
+# Clonez le dépôt Secure-Raspberry-PI
+git clone https://github.com/Meqdar-Achraf/Secure-Raspberry-PI.git
+cd Secure-Raspberry-PI
 
 # Listez les fichiers disponibles
 ls -la
