@@ -351,12 +351,10 @@ sudo tail -f /var/log/fail2ban.log
 ### Ressources additionnelles
 
 - **Documentation Raspberry Pi** : https://www.raspberrypi.org/documentation/
-- **Sécurité Linux** : https://linux-security.wiki/
 - **NetworkManager** : https://networkmanager.dev/
 - **Fail2Ban** : https://www.fail2ban.org/
 - **Zabbix Documentation** : https://www.zabbix.com/documentation
 - **Installation Zabbix** : https://www.zabbix.com/download
-- **Ansible Documentation** : https://docs.ansible.com/
 - **Docuùentation Linux** : https://doc.clinux.fr/
 
 ---
