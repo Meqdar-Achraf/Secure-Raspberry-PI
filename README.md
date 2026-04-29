@@ -137,7 +137,9 @@ ifconfig
 - **Configuration IP & DNS** : Stratégies pour configurer des adresses IP statiques et les paramètres DNS afin d'assurer une connectivité réseau fiable.  
 
 - **Outils d'analyse réseau** : Outils et techniques pour analyser le trafic réseau et identifier les menaces potentielles.
-  
+
+- **Script d'audit** : `Check-security.sh` pout auditer la mashine.
+
 - **Supervision Zabbix** : Configuration et intégration d'agents Zabbix pour monitoring .
 
 - **Playbook Ansible** : Automatisation du déploiement et de la configuration.
